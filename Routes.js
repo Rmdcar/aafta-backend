@@ -9,12 +9,14 @@ const autentication = require('./middlewares/Auth')
 router.post('/register', autentication.autenticacao, userController.registerUser);
 router.post('/login', userController.loginUser);
 router.get('/getAllUsers', autentication.autenticacao, userController.getUsers);
+router.get('/getUser/:id', autentication.autenticacao, userController.getUser);
 router.delete('/deleteUser/:id', autentication.autenticacao, userController.deleteUser);
 router.patch('/update/:id', autentication.autenticacao, userController.editUser);
 
 // Rotas relacionadas às contribuições
 router.post('/newcontribution', autentication.autenticacao, contributionController.registerContribution);
 router.get('/getallcontributions',  autentication.autenticacao, contributionController.getContributions);
+router.get('/getcontributionbyuser/:id',autentication.autenticacao, contributionController.getContributionbyUser);
 router.patch('/updatecontribution/:id', autentication.autenticacao, contributionController.editContributions)
 router.delete('/deletecontribution/:id', autentication.autenticacao, contributionController.deleteContribution)
 

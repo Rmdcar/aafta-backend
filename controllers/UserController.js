@@ -65,6 +65,18 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+
+exports.getUser = async (req, res) => {
+  const {id} = req.params
+  try {
+    const user = await User.findById(id).select("-password")
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
