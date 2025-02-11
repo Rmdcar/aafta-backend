@@ -6,22 +6,22 @@ const expensesController = require('./controllers/ExpensesController');
 const autentication = require('./middlewares/Auth')
 
 // Rotas relacionadas aos usuários
-router.post('/register', userController.registerUser);
-router.post('/login', userController.loginUser);
+router.post('/register', autentication.autenticacao, userController.registerUser);
+router.post('/login', autentication.autenticacao, userController.loginUser);
 router.get('/getAllUsers', autentication.autenticacao, userController.getUsers);
-router.delete('/deleteUser/:id', userController.deleteUser);
-router.patch('/update/:id', userController.editUser);
+router.delete('/deleteUser/:id', autentication.autenticacao, userController.deleteUser);
+router.patch('/update/:id', autentication.autenticacao, userController.editUser);
 
 // Rotas relacionadas às contribuições
-router.post('/newcontribution', contributionController.registerContribution);
-router.get('/getallcontributions',  contributionController.getContributions);
-router.patch('/updatecontribution/:id', contributionController.editContributions)
-router.delete('/deletecontribution/:id', contributionController.deleteContribution)
+router.post('/newcontribution', autentication.autenticacao, contributionController.registerContribution);
+router.get('/getallcontributions',  autentication.autenticacao, contributionController.getContributions);
+router.patch('/updatecontribution/:id', autentication.autenticacao, contributionController.editContributions)
+router.delete('/deletecontribution/:id', autentication.autenticacao, contributionController.deleteContribution)
 
 // Rotas relacionadas às despesas
-router.post('/newexpense', expensesController.registerExpense);
-router.get('/getallexpenses', expensesController.getExpenses)
-router.patch('/updateexpense/:id', expensesController.editExpenses)
-router.delete('/deleteexpense/:id', expensesController.deleteExpense)
+router.post('/newexpense', autentication.autenticacao, expensesController.registerExpense);
+router.get('/getallexpenses', autentication.autenticacao, expensesController.getExpenses)
+router.patch('/updateexpense/:id', autentication.autenticacao, expensesController.editExpenses)
+router.delete('/deleteexpense/:id', autentication.autenticacao, expensesController.deleteExpense)
 
 module.exports = router;
