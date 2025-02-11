@@ -44,13 +44,31 @@ exports.getContributions = async (req, res) => {
 
 
 exports.getContributionbyUser = async (req, res) => {
-  const { id } = req.params; // Extrai o user da URL (note que o parâmetro é "id", não "user")
+  const { id } = req.params; // Extrai o user da URL
+  const { startDate, endDate } = req.query; // Extrai as datas da query string
 
   console.log("ID do usuário recebido:", id); // Log para depuração
+  console.log("Data inicial:", startDate); // Log para depuração
+  console.log("Data final:", endDate); // Log para depuração
 
   try {
-    // Busca todas as receitas associadas ao user
-    const contributions = await Receita.find({ user: id });
+    // Verifica se as datas foram fornecidas
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        error: true,
+        message: "As datas inicial e final são obrigatórias.",
+      });
+    }
+
+    // Converte as datas para o formato Date
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Busca as receitas associadas ao user dentro do intervalo de datas
+    const contributions = await Receita.find({
+      user: id,
+      dataRecebimento: { $gte: start, $lte: end }, // Filtra por intervalo de datas
+    });
 
     console.log("Resultado da busca:", contributions); // Log para depuração
 
@@ -58,7 +76,7 @@ exports.getContributionbyUser = async (req, res) => {
     if (!contributions || contributions.length === 0) {
       return res.status(404).json({
         error: true,
-        message: "Nenhuma receita encontrada para este usuário",
+        message: "Nenhuma receita encontrada para este usuário no período selecionado.",
       });
     }
 
@@ -76,7 +94,6 @@ exports.getContributionbyUser = async (req, res) => {
     });
   }
 };
-
 
 
 exports.editContributions = async (req, res) => {
