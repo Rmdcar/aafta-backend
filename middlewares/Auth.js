@@ -16,7 +16,7 @@ exports.autenticacao = (req, res, next) => {
     return next();
   } catch (error) {
     console.error('Erro ao verificar token JWT:', error);
-    return res.status(401).json({ message: 'Não autorizado teste' });
+    return res.status(401).json({ message: 'Não autorizado' });
     
   }
 }

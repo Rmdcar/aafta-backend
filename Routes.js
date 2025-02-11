@@ -8,7 +8,7 @@ const autentication = require('./middlewares/Auth')
 // Rotas relacionadas aos usuários
 router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
-router.get('/getAllUsers', userController.getUsers);
+router.get('/getAllUsers', autentication.autenticacao, userController.getUsers);
 router.delete('/deleteUser/:id', userController.deleteUser);
 router.patch('/update/:id', userController.editUser);
 
