@@ -1,13 +1,14 @@
 const nodemailer = require("nodemailer");
 const Receita = require('../models/Receitas');
 const User = require("../models/User");
+require('dotenv').config();
 
 // Configuração do transporte de e-mail
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'imoveisrenato2@gmail.com',  // Seu e-mail do Gmail
-    pass: 'fxwl awag rwwq gxms'  // Senha do App ou a senha da conta
+    user: 'aafta.go@gmail.com',  // Seu e-mail do Gmail
+    pass: `${process.env.CHAVE_EMAIL}`  // Senha do App ou a senha da conta
   }
 });
 
