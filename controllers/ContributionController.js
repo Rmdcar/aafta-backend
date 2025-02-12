@@ -68,7 +68,9 @@ exports.getContributionbyUser = async (req, res) => {
     const contributions = await Receita.find({
       user: id,
       dataRecebimento: { $gte: start, $lte: end }, // Filtra por intervalo de datas
-    });
+    })
+      .lean() // Retorna objetos JavaScript simples
+      .exec();
 
     console.log("Resultado da busca:", contributions); // Log para depuração
 
@@ -80,10 +82,18 @@ exports.getContributionbyUser = async (req, res) => {
       });
     }
 
+    // Converte ObjectId e Date para strings
+    const serializedContributions = contributions.map((receita) => ({
+      ...receita,
+      _id: receita._id.toString(), // Converte ObjectId para string
+      user: receita.user.toString(), // Converte ObjectId para string
+      dataRecebimento: receita.dataRecebimento.toISOString(), // Converte Date para string
+    }));
+
     // Retorna as receitas encontradas
     res.status(200).json({
       error: false,
-      data: contributions, // Retorna a lista de receitas
+      data: serializedContributions, // Retorna a lista de receitas serializadas
     });
   } catch (error) {
     // Captura erros inesperados
@@ -94,7 +104,6 @@ exports.getContributionbyUser = async (req, res) => {
     });
   }
 };
-
 
 exports.editContributions = async (req, res) => {
     const { id } = req.params;
