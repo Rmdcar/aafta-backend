@@ -5,6 +5,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const userRoutes = require('./Routes')
+const emailRoutes = require('./Routes')
 
 
 const app = express()
@@ -33,6 +34,12 @@ app.use((req, res, next) => {
   console.log(`Corpo da requisição:`, safeBody);
   next();
 });
+
+// Middleware para processar JSON
+app.use(express.json());
+
+// Usa as rotas de e-mail
+app.use("/api", emailRoutes);
 
 
 

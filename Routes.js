@@ -4,6 +4,8 @@ const userController = require('./controllers/UserController');
 const contributionController = require('./controllers/ContributionController');
 const expensesController = require('./controllers/ExpensesController');
 const autentication = require('./middlewares/Auth')
+const emailController = require("./controllers/emailController");
+
 
 // Rotas relacionadas aos usuários
 router.post('/register', autentication.autenticacao, userController.registerUser);
@@ -25,5 +27,10 @@ router.post('/newexpense', autentication.autenticacao, expensesController.regist
 router.get('/getallexpenses', autentication.autenticacao, expensesController.getExpenses)
 router.patch('/updateexpense/:id', autentication.autenticacao, expensesController.editExpenses)
 router.delete('/deleteexpense/:id', autentication.autenticacao, expensesController.deleteExpense)
+
+
+
+// Rota para enviar e-mail
+router.post("/enviar-email", emailController.enviarEmail);
 
 module.exports = router;
