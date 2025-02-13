@@ -32,46 +32,27 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Verifica se o email e a senha foram fornecidos
-    if (!email || !password) {
-      return res.status(400).json({
-        error: true,
-        message: "Email e senha são obrigatórios.",
-      });
-    }
-
-    // Busca o usuário no banco de dados
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({
+      return res.json({
         error: true,
-        message: "Usuário não encontrado.",
+        message: "Usuário não encontrado",
       });
     }
-
-    // Compara a senha fornecida com a senha armazenada (hash)
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({
+      return res.json({
         error: true,
-        message: "Senha inválida.",
+        message: "Senha invalida",
       });
     }
-
-    // Gera o token JWT
-    const token = jwt.sign({ id: user._id }, process.env.CHAVE_JWT, {
-      expiresIn: "6000s", // Token expira em 6000 segundos (100 minutos)
+    const token = jwt.sign({ id: user._id }, `${process.env.CHAVE_JWT}`, {
+      expiresIn: "6000s",
     });
-
-    // Retorna o token e o ID do usuário
-    res.status(200).json({ token, usuario: user._id });
+    const usuario = user._id;
+    res.status(200).json({ token, usuario });
   } catch (error) {
-    console.error("Erro no login:", error); // Log do erro para debug
-    res.status(500).json({
-      error: true,
-      message: "Erro interno no servidor. Tente novamente mais tarde.",
-    });
+    res.status(500).json({ error: error.message });
   }
 };
 

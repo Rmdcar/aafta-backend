@@ -1,4 +1,6 @@
 const Receita = require('../models/Receitas');
+const User = require('../models/User'); 
+
 
 
 
@@ -74,11 +76,15 @@ exports.getContributionbyUser = async (req, res) => {
 
     console.log("Resultado da busca:", contributions); // Log para depuração
 
+    // Busca o usuário para obter o nome
+    const user = await User.findById(id).lean().exec();
+
     // Verifica se foram encontradas receitas para o user
     if (!contributions || contributions.length === 0) {
+      const userName = user ? user.name : "Usuário não encontrado"; // Obtém o nome do usuário ou uma mensagem padrão
       return res.status(404).json({
         error: true,
-        message: "Nenhuma receita encontrada para este usuário no período selecionado.",
+        name: userName
       });
     }
 
